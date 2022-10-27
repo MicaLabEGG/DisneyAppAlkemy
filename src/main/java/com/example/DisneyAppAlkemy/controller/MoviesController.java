@@ -2,10 +2,13 @@ package com.example.DisneyAppAlkemy.controller;
 
 import com.example.DisneyAppAlkemy.entity.Characters;
 import com.example.DisneyAppAlkemy.entity.Movies;
+import com.example.DisneyAppAlkemy.services.CharacterServices;
 import com.example.DisneyAppAlkemy.services.GendersServices;
 import com.example.DisneyAppAlkemy.services.MoviesServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,8 +28,11 @@ public class MoviesController {
     @Autowired
     private GendersServices gendersServices;
 
+    @Autowired
+    private CharacterServices characterServices;
+
     @PostMapping("save")
-    public Movies save(@RequestParam("file") MultipartFile image, @ModelAttribute Movies movies) {
+    public ResponseEntity<Movies> save(@RequestParam("file") MultipartFile image, @Validated Movies movies) throws Exception {
         if (!image.isEmpty()) {
             Path imagesPath = Paths.get("src//main//resources//static//images");
             String absolutPath = imagesPath.toFile().getAbsolutePath();
@@ -39,7 +45,8 @@ public class MoviesController {
                 e.printStackTrace();
             }
         }
-        return moviesServices.save(movies);
+        characterServices.updateCharacter(movies.getCharactersID().get(0),movies.getCharactersID().get(0).getCharacterId(), movies);
+        return new ResponseEntity<Movies>(moviesServices.save(movies), HttpStatus.CREATED);
     }
 
     @PutMapping("/{movieId}")

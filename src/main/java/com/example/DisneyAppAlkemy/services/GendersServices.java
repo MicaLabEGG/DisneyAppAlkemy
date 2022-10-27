@@ -1,5 +1,6 @@
 package com.example.DisneyAppAlkemy.services;
 
+import com.example.DisneyAppAlkemy.entity.Characters;
 import com.example.DisneyAppAlkemy.entity.Genders;
 import com.example.DisneyAppAlkemy.entity.Movies;
 import com.example.DisneyAppAlkemy.repository.GendersRepository;
@@ -26,6 +27,10 @@ public class GendersServices {
         }catch(Exception err){
             return false;
         }
+    }
+
+    public List<Genders> getAllGenders(){
+        return gendersRepository.findAll();
     }
 
     public Optional<Genders> findById(Integer genreId) {

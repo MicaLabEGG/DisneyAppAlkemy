@@ -11,15 +11,20 @@ import javax.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
 
-@Data
+
 @Entity
+@Data
+@NoArgsConstructor
 public class AppUser{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private Integer id;
     private String username;
+    private String email;
     private String password;
 
+    public AppUser(String username, String email, String encode) {
+    }
 }
 

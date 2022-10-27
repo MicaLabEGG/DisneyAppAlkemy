@@ -1,10 +1,10 @@
 package com.example.DisneyAppAlkemy.services;
 
 import com.example.DisneyAppAlkemy.entity.Characters;
+import com.example.DisneyAppAlkemy.entity.Movies;
 import com.example.DisneyAppAlkemy.exception.ResourceNotFoundException;
 import com.example.DisneyAppAlkemy.repository.CharacterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,7 +20,7 @@ public class CharacterServices {
         return characterRepository.save(character);
     }
 
-    public Characters updateCharacter(Characters characters, Integer characterId) throws Exception {
+    public Characters updateCharacter(Characters characters, Integer characterId, Movies movies) throws Exception {
         Optional<Characters> characters1 = characterRepository.findById(characterId);
         if (characters1.isPresent()) {
             Characters existingCharacters = characters1.get();
@@ -29,7 +29,7 @@ public class CharacterServices {
             existingCharacters.setAge(characters.getAge());
             existingCharacters.setWeight(characters.getWeight());
             existingCharacters.setHistory(characters.getHistory());
-            existingCharacters.setMoviesId(characters.getMoviesId());
+            existingCharacters.getMoviesId().add(movies);
             // guardar existingEmployee en DB
             characterRepository.save(existingCharacters);
             return existingCharacters;

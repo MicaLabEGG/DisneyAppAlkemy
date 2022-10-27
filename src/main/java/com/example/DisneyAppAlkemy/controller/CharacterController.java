@@ -5,6 +5,7 @@ import com.example.DisneyAppAlkemy.services.CharacterServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,9 +23,10 @@ public class CharacterController {
     @Autowired
     private CharacterServices characterServices;
 
-    //no funciona
+    //Anda Postman
     @PostMapping("save")
-    public ResponseEntity<Characters> save(@RequestParam("file") MultipartFile image, @RequestBody Characters characters){
+    public ResponseEntity<Characters> save(@RequestParam("file") MultipartFile image,
+                                           @Validated Characters characters){
         if(!image.isEmpty()){
             Path imagesPath = Paths.get("src//main//resources//static//images");
             String absolutPath = imagesPath.toFile().getAbsolutePath();
@@ -43,11 +45,12 @@ public class CharacterController {
 
     //Postman anda
     @PutMapping("/{characterId}")
-    public ResponseEntity<Characters> updateCharacter(@PathVariable("characterId") Integer characterId,@RequestBody Characters characters) throws Exception {
+    public ResponseEntity<Characters> updateCharacter(@PathVariable("characterId") Integer characterId,@Validated Characters characters) throws Exception {
         if(characters.getCharacterId() == null){
             return ResponseEntity.badRequest().build();
         }
-        return new ResponseEntity<Characters>(characterServices.updateCharacter(characters, characterId), HttpStatus.OK);
+
+        return new ResponseEntity<Characters>(characterServices.updateCharacter(characters, characterId, characters.getMoviesId().get(0)), HttpStatus.OK);
     }
 
     //Postman anda
